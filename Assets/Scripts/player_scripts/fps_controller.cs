@@ -24,6 +24,8 @@ public class fps_controller : MonoBehaviour
     [SerializeField] private bool is_crouch = false;
     [SerializeField] private bool is_floor = false;
 
+    public ui_manager ui_manager;
+
     void Start()
     {
         character_controller = GetComponent<CharacterController>();
@@ -90,25 +92,26 @@ public class fps_controller : MonoBehaviour
 
     private void change_pose()
     {
+        // Poses: 0 -> Normal   0 -> Crouch   2 -> Floor
         if (Input.GetKeyDown(KeyCode.C))
         {
             if (!is_crouch && !is_floor)
             {
                 is_crouch = true;
-                //uiManager.UpdatePosition("Crouching");
+                ui_manager.update_pose(1);
                 Camera.main.transform.localPosition = new Vector3(0, crouch_camera_height, 0);
             }
             else if (is_crouch)
             {
                 is_crouch = false;
                 is_floor = true;
-                //uiManager.UpdatePosition("Proning");
+                ui_manager.update_pose(2);
                 Camera.main.transform.localPosition = new Vector3(0, floor_camera_height, 0);
             }
             else if (is_floor)
             {
                 is_floor = false;
-                //uiManager.UpdatePosition("Normal");
+                ui_manager.update_pose(0);
                 Camera.main.transform.localPosition = new Vector3(0, nomral_camera_height, 0);
             }
         }
