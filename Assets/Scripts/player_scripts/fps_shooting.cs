@@ -207,8 +207,11 @@ public class fps_shooting : MonoBehaviour
         if (w_logic())
         {
             current_weapon = WeaponType.ashe_w;
-            int num_bullets = get_actual_number_bullets();
-            shoot_wait();
+            multiple_angluar_shoot(0.7f);
+            multiple_angluar_shoot(-0.7f);
+            multiple_angluar_shoot(0.3f);
+            multiple_angluar_shoot(-0.3f);
+            multiple_angluar_shoot(0.0f);
             current_weapon = WeaponType.ashe_normal;
         }
     }
@@ -314,6 +317,26 @@ public class fps_shooting : MonoBehaviour
         Rigidbody bulletRB = bullet.GetComponent<Rigidbody>();
 
         bullet_physics(bulletRB);
+    }
+
+    private void multiple_angluar_shoot(float angle)
+    {
+        GameObject bullet_prefab = get_actual_bullet_prefab();
+        GameObject bullet = Instantiate(bullet_prefab, fire_point.position, fire_point.rotation);
+        Rigidbody bulletRB = bullet.GetComponent<Rigidbody>();
+
+        rotated_bullet_physics(bulletRB, angle);
+    }
+
+    public void rotated_bullet_physics(Rigidbody rb, float angle)
+    {
+        if (rb != null)
+        {
+            float bullet_speed = get_actual_bullet_speed();
+            //rb.velocity = apply_gravity(bullet_speed * (fire_point.forward + new Vector3(angle, angle, angle)), Time.deltaTime);
+            rb.velocity = (bullet_speed * fire_point.forward);
+            //rb.rotation = Quaternion.AngleAxis(-45, Vector3.left);
+        }
     }
 
     public void bullet_physics(Rigidbody rb)
